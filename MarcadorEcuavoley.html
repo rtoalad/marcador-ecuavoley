@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Marcador Ecuavoley</title>
+  <style>
+    body { font-family: Arial; text-align: center; }
+    .equipo { display: inline-block; margin: 20px; }
+    .saque { color: green; font-weight: bold; }
+    button { margin: 5px; padding: 10px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <div class="equipo">
+    <h2>Equipo A <span id="saqueA" class="saque">●</span></h2>
+    <h1 id="equipoA">0</h1>
+    <button onclick="sumarPunto('A')">+</button>
+    <button onclick="restarPunto('A')">-</button>
+  </div>
+
+  <div class="equipo">
+    <h2>Equipo B <span id="saqueB" class="saque" style="visibility:hidden;">●</span></h2>
+    <h1 id="equipoB">0</h1>
+    <button onclick="sumarPunto('B')">+</button>
+    <button onclick="restarPunto('B')">-</button>
+  </div>
+
+  <div>
+    <button onclick="intercambiar()">↔ Intercambiar</button>
+    <button onclick="cambio()">Cambio</button>
+    <button onclick="reiniciar()">⟳ Reiniciar</button>
+
+  </div>
+
+  <script>
+    let puntosA = 0, puntosB = 0, saque = "A";
+
+    function sumarPunto(equipo) {
+      if (saque === equipo) {
+        if (equipo === "A") puntosA++;
+        else puntosB++;
+        actualizar();
+      }
+    }
+
+    function restarPunto(equipo) {
+      if (equipo === "A" && puntosA > 0) puntosA--;
+      else if (equipo === "B" && puntosB > 0) puntosB--;
+      actualizar();
+    }
+
+    function reiniciar() {
+        puntosA = 0;
+        puntosB = 0;
+        saque = "A"; // por defecto vuelve a Equipo A
+        actualizar();
+    }
+
+
+    function intercambiar() {
+      [puntosA, puntosB] = [puntosB, puntosA];
+      actualizar();
+    }
+
+    function cambio() {
+      saque = saque === "A" ? "B" : "A";
+      actualizar();
+    }
+
+    function actualizar() {
+      document.getElementById("equipoA").innerText = puntosA;
+      document.getElementById("equipoB").innerText = puntosB;
+      document.getElementById("saqueA").style.visibility = saque === "A" ? "visible" : "hidden";
+      document.getElementById("saqueB").style.visibility = saque === "B" ? "visible" : "hidden";
+    }
+  </script>
+</body>
+</html>
