@@ -30,14 +30,14 @@
   }
 
   .equipo h1 {
-    font-size: 144px;
+    font-size: 50px;
     color: #0077b6; /* azul bonito para los puntos */
   }
 
   button {
     margin: 12px;
     padding: 28px;   /* más espacio interno */
-    font-size: 80px; /* texto más grande */
+    font-size: 60px; /* texto más grande */
     border: none;
     border-radius: 12px; /* bordes un poco más redondeados */
     cursor: pointer;
@@ -72,6 +72,18 @@
     border: 5px solid #d00000; /* rojo intenso */
     box-shadow: 0 0 20px rgba(208,0,0,0.7); /* brillo rojo */
   }
+  .configuracion {
+    margin: 20px;
+    font-size: 28px;
+    color: #333;
+  }
+
+  #maximo {
+    width: 70px;       /* ancho reducido */
+    font-size: 28px;   /* texto grande y legible */
+    text-align: center;
+    padding: 5px;
+  }
 
 </style>
 
@@ -79,21 +91,24 @@
 <body>
   <div class="contenedor">
     <div class="equipo equipoA">
-      <h2 id="nombreA">Equipo A <span id="saqueA" class="saque">●</span></h2>
+      <h2 id="nombreA">Equipo A <span id="saqueA" class="saque">🏐</span></h2>
       <h1 id="equipoA">0</h1>
       <button onclick="sumarPunto('A')">+</button>
       <button onclick="restarPunto('A')">-</button>
     </div>
 
     <div class="equipo equipoB">
-      <h2 id="nombreB">Equipo B <span id="saqueB" class="saque" style="visibility:hidden;">●</span></h2>
+      <h2 id="nombreB">Equipo B <span id="saqueB" class="saque" style="visibility:hidden;">🏐</span></h2>
       <h1 id="equipoB">0</h1>
       <button onclick="sumarPunto('B')">+</button>
       <button onclick="restarPunto('B')">-</button>
     </div>
   </div>
-
-  <div class="acciones">
+  <div class="configuracion">
+    <label for="maximo">Número máximo:</label>
+    <input type="number" id="maximo" value="8" min="1" max="10">
+  </div>
+    <div class="acciones">
     <button onclick="intercambiar()">↔ Intercambiar</button>
     <button onclick="cambio()">Cambio</button>
     <button onclick="reiniciar()">⟳ Reiniciar</button>
@@ -105,6 +120,7 @@
     let puntosA = 0;
     let puntosB = 0;
     let saque = "A"; // equipo que tiene el saque
+    let sonidoEmitido = false; // controla si ya sonó
 
     function actualizar() {
       document.getElementById("equipoA").innerText = puntosA;
@@ -140,21 +156,20 @@
       actualizar();
     }
 
-
     function reiniciar() {
       puntosA = 0;
       puntosB = 0;
       saque = "A";
+      sonidoEmitido = false; // permite que vuelva a sonar
       actualizar();
     }
-
-
 
     function sumarPunto(equipo) {
       if (saque === equipo) {
         if (equipo === "A") puntosA++;
         else puntosB++;
         actualizar();
+        verificarMaximo(); // 👈 aquí
       }
     }
 
@@ -162,8 +177,32 @@
       if (equipo === "A" && puntosA > 0) puntosA--;
       else if (equipo === "B" && puntosB > 0) puntosB--;
       actualizar();
+      verificarMaximo();
     }
 
+    function verificarMaximo() {
+      let maximo = 8; // fijo en 8
+
+      if (!sonidoEmitido && (puntosA === maximo || puntosB === maximo)) {
+        reproducirSonido();
+        sonidoEmitido = true; // marca que ya sonó
+      }
+    }
+
+    function reproducirSonido() {
+      let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let oscillator = audioCtx.createOscillator();
+      oscillator.type = "sawtooth";
+      oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // tono A4
+      oscillator.connect(audioCtx.destination);
+      oscillator.start();
+
+      // detener después de 3 segundos
+      setTimeout(() => {
+        oscillator.stop();
+        audioCtx.close();
+      }, 3000);
+    }
     
   </script>
 </body>
