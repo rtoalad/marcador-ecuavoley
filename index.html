@@ -3,37 +3,152 @@
 <head>
   <meta charset="UTF-8">
   <title>Marcador Ecuavoley</title>
-  <style>
-    body { font-family: Arial; text-align: center; }
-    .equipo { display: inline-block; margin: 20px; }
-    .saque { color: green; font-weight: bold; }
-    button { margin: 5px; padding: 10px; font-size: 18px; }
-  </style>
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: linear-gradient(to right, #f0f8ff, #e6f7ff); /* fondo suave */
+  font-size: 24px;
+  }
+
+  .contenedor {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+  }
+
+  .equipo {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .equipo h2 {
+    font-size: 48px;
+    color: #333;
+  }
+
+  .equipo h1 {
+    font-size: 144px;
+    color: #0077b6; /* azul bonito para los puntos */
+  }
+
+  button {
+    margin: 10px;
+    padding: 20px;
+    font-size: 32px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+  }
+
+  button:nth-child(1) {
+    background-color: #4caf50; /* verde para sumar */
+    color: white;
+  }
+
+  button:nth-child(2) {
+    background-color: #f44336; /* rojo para restar */
+    color: white;
+  }
+
+  .acciones {
+    margin-top: 40px;
+  }
+
+  .acciones button {
+    background-color: #ff9800; /* naranja para acciones */
+    color: white;
+    margin: 15px;
+  }
+
+  .activo {
+    border: 5px solid #d00000; /* rojo intenso */
+    box-shadow: 0 0 20px rgba(208,0,0,0.7); /* brillo rojo */
+  }
+
+</style>
+
 </head>
 <body>
-  <div class="equipo">
-    <h2>Equipo A <span id="saqueA" class="saque">●</span></h2>
-    <h1 id="equipoA">0</h1>
-    <button onclick="sumarPunto('A')">+</button>
-    <button onclick="restarPunto('A')">-</button>
+  <div class="contenedor">
+    <div class="equipo equipoA">
+      <h2 id="nombreA">Equipo A <span id="saqueA" class="saque">●</span></h2>
+      <h1 id="equipoA">0</h1>
+      <button onclick="sumarPunto('A')">+</button>
+      <button onclick="restarPunto('A')">-</button>
+    </div>
+
+    <div class="equipo equipoB">
+      <h2 id="nombreB">Equipo B <span id="saqueB" class="saque" style="visibility:hidden;">●</span></h2>
+      <h1 id="equipoB">0</h1>
+      <button onclick="sumarPunto('B')">+</button>
+      <button onclick="restarPunto('B')">-</button>
+    </div>
   </div>
 
-  <div class="equipo">
-    <h2>Equipo B <span id="saqueB" class="saque" style="visibility:hidden;">●</span></h2>
-    <h1 id="equipoB">0</h1>
-    <button onclick="sumarPunto('B')">+</button>
-    <button onclick="restarPunto('B')">-</button>
-  </div>
-
-  <div>
+  <div class="acciones">
     <button onclick="intercambiar()">↔ Intercambiar</button>
     <button onclick="cambio()">Cambio</button>
     <button onclick="reiniciar()">⟳ Reiniciar</button>
-
   </div>
 
   <script>
-    let puntosA = 0, puntosB = 0, saque = "A";
+    window.onload = actualizar;
+
+    let puntosA = 0;
+    let puntosB = 0;
+    let saque = "A"; // equipo que tiene el saque
+
+    function actualizar() {
+      document.getElementById("equipoA").innerText = puntosA;
+      document.getElementById("equipoB").innerText = puntosB;
+
+      // mostrar el ● solo en el equipo con saque
+      document.getElementById("saqueA").style.visibility = saque === "A" ? "visible" : "hidden";
+      document.getElementById("saqueB").style.visibility = saque === "B" ? "visible" : "hidden";
+
+      // aplicar marco rojo al equipo con saque
+      document.querySelector(".equipoA").classList.toggle("activo", saque === "A");
+      document.querySelector(".equipoB").classList.toggle("activo", saque === "B");
+    }
+
+    function cambio() {
+      saque = saque === "A" ? "B" : "A";
+      actualizar();
+    }
+
+    function intercambiar() {
+      // intercambiar puntos
+      [puntosA, puntosB] = [puntosB, puntosA];
+
+      // intercambiar nombres (solo texto, no IDs)
+      let nombreA = document.getElementById("nombreA").childNodes[0].nodeValue.trim();
+      let nombreB = document.getElementById("nombreB").childNodes[0].nodeValue.trim();
+      document.getElementById("nombreA").childNodes[0].nodeValue = nombreB + " ";
+      document.getElementById("nombreB").childNodes[0].nodeValue = nombreA + " ";
+
+      // intercambiar saque (variable y visual)
+      saque = saque === "A" ? "B" : "A";
+
+      actualizar();
+    }
+
+
+    function reiniciar() {
+      puntosA = 0;
+      puntosB = 0;
+      saque = "A";
+      actualizar();
+    }
+
+
 
     function sumarPunto(equipo) {
       if (saque === equipo) {
@@ -49,30 +164,8 @@
       actualizar();
     }
 
-    function reiniciar() {
-        puntosA = 0;
-        puntosB = 0;
-        saque = "A"; // por defecto vuelve a Equipo A
-        actualizar();
-    }
-
-
-    function intercambiar() {
-      [puntosA, puntosB] = [puntosB, puntosA];
-      actualizar();
-    }
-
-    function cambio() {
-      saque = saque === "A" ? "B" : "A";
-      actualizar();
-    }
-
-    function actualizar() {
-      document.getElementById("equipoA").innerText = puntosA;
-      document.getElementById("equipoB").innerText = puntosB;
-      document.getElementById("saqueA").style.visibility = saque === "A" ? "visible" : "hidden";
-      document.getElementById("saqueB").style.visibility = saque === "B" ? "visible" : "hidden";
-    }
+    
   </script>
 </body>
 </html>
+
