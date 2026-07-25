@@ -5,41 +5,45 @@
   <title>Marcador Ecuavoley</title>
 <style>
   body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: linear-gradient(to right, #f0f8ff, #e6f7ff); /* fondo suave */
-  font-size: 24px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(to right, #f0f8ff, #e6f7ff);
+    font-size: 3vw; /* tamaño base relativo */
+    margin: 0;
+    padding: 0;
   }
 
   .contenedor {
     display: flex;
     justify-content: center;
-    gap: 50px;
+    gap: 5vw;
+    flex-wrap: wrap; /* se acomoda en pantallas pequeñas */
   }
 
   .equipo {
     background-color: #ffffff;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-radius: 2vw;
+    padding: 2vw;
+    box-shadow: 0 0.5vw 1vw rgba(0,0,0,0.2);
+    flex: 1 1 40%;
   }
 
   .equipo h2 {
-    font-size: 48px;
+    font-size: 5vw;
     color: #333;
   }
 
   .equipo h1 {
-    font-size: 50px;
-    color: #0077b6; /* azul bonito para los puntos */
+    font-size: 15vw;
+    color: #0077b6;
   }
 
   button {
-    margin: 12px;
-    padding: 28px;   /* más espacio interno */
-    font-size: 60px; /* texto más grande */
+    margin: 1vw;
+    padding: 2vw;
+    font-size: 4vw;
     border: none;
-    border-radius: 12px; /* bordes un poco más redondeados */
+    border-radius: 1vw;
     cursor: pointer;
     transition: transform 0.2s;
   }
@@ -48,43 +52,26 @@
     transform: scale(1.1);
   }
 
-  button:nth-child(1) {
-    background-color: #4caf50; /* verde para sumar */
-    color: white;
-  }
-
-  button:nth-child(2) {
-    background-color: #f44336; /* rojo para restar */
-    color: white;
-  }
-
   .acciones {
-    margin-top: 40px;
+    margin-top: 5vw;
   }
 
   .acciones button {
-    background-color: #ff9800; /* naranja para acciones */
+    background-color: #ff9800;
     color: white;
-    margin: 15px;
+    margin: 2vw;
   }
 
   .activo {
-    border: 5px solid #d00000; /* rojo intenso */
-    box-shadow: 0 0 20px rgba(208,0,0,0.7); /* brillo rojo */
-  }
-  .configuracion {
-    margin: 20px;
-    font-size: 28px;
-    color: #333;
+    border: 0.8vw solid #d00000; /* marco rojo intenso */
+    box-shadow: 0 0 2vw rgba(208,0,0,0.7);
   }
 
-  #maximo {
-    width: 70px;       /* ancho reducido */
-    font-size: 28px;   /* texto grande y legible */
-    text-align: center;
-    padding: 5px;
+  .saque {
+    vertical-align: middle;
+    margin-left: 1vw;
+    font-size: 5vw; /* pelota adaptativa */
   }
-
 </style>
 
 </head>
